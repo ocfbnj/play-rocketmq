@@ -21,7 +21,7 @@ func main() {
 	rlog.SetLogLevel("error")
 
 	c, err := rocketmq.NewPushConsumer(
-		consumer.WithNsResolver(primitive.NewPassthroughResolver([]string{consts.Endpoint})),
+		consumer.WithNsResolver(primitive.NewPassthroughResolver([]string{consts.NameSrvEndpoint})),
 		consumer.WithGroupName(consts.ConsumerGroup),
 		consumer.WithConsumerModel(consumer.Clustering),
 		consumer.WithConsumerOrder(true),

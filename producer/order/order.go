@@ -17,7 +17,7 @@ func main() {
 	rlog.SetLogLevel("error")
 
 	p, err := rocketmq.NewProducer(
-		producer.WithNsResolver(primitive.NewPassthroughResolver([]string{consts.Endpoint})),
+		producer.WithNsResolver(primitive.NewPassthroughResolver([]string{consts.NameSrvEndpoint})),
 		producer.WithQueueSelector(producer.NewHashQueueSelector()),
 	)
 	if err != nil {

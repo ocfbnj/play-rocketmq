@@ -55,7 +55,7 @@ services:
     ports:
       - 8080:8080
     environment:
-      - JAVA_OPTS=-Drocketmq.namesrv.addr=namesrv:9876
+      - JAVA_OPTS=-Drocketmq.namesrv.addr=rmq-namesrv:9876
 
   # Service for go client
   rmq-client-go:

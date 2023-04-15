@@ -19,7 +19,7 @@ services:
       - 10911:10911
       - 10912:10912
     environment:
-      - NAMESRV_ADDR=namesrv:9876
+      - NAMESRV_ADDR=rmq-namesrv:9876
     volumes:
       - ./logs/broker0:/home/rocketmq/logs
       - ./store/broker0:/home/rocketmq/store
@@ -35,7 +35,7 @@ services:
       - 10931:10911
       - 10932:10912
     environment:
-      - NAMESRV_ADDR=namesrv:9876
+      - NAMESRV_ADDR=rmq-namesrv:9876
     volumes:
       - ./logs/broker1:/home/rocketmq/logs
       - ./store/broker1:/home/rocketmq/store

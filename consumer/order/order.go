@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"sync"
 	"time"
 
 	"github.com/ocfbnj/play-rocketmq/consts"
@@ -17,6 +18,15 @@ import (
 	"github.com/apache/rocketmq-client-go/v2/rlog"
 )
 
+var wg = sync.WaitGroup{}
+
+func interceptor(ctx context.Context, req, reply interface{}, next primitive.Invoker) error {
+	wg.Add(1)
+	defer wg.Done()
+
+	return next(ctx, req, reply)
+}
+
 func main() {
 	rlog.SetLogLevel("error")
 
@@ -25,6 +35,7 @@ func main() {
 		consumer.WithGroupName(consts.ConsumerGroup),
 		consumer.WithConsumerModel(consumer.Clustering),
 		consumer.WithConsumerOrder(true),
+		consumer.WithInterceptor(interceptor),
 	)
 	if err != nil {
 		log.Fatalln(err)
@@ -37,7 +48,8 @@ func main() {
 
 			log.Printf("orderly context: %s\n", utils.MarshalJson(orderlyCtx))
 			log.Printf("msgs: %s\n", utils.MarshalJson(msgs))
-			time.Sleep(1 * time.Minute)
+			time.Sleep(10 * time.Second)
+			log.Println("done")
 
 			return consumer.ConsumeSuccess, nil
 		},
@@ -53,4 +65,7 @@ func main() {
 	sig := make(chan os.Signal, 1)
 	signal.Notify(sig, os.Interrupt)
 	fmt.Println((<-sig).String())
+
+	c.Shutdown()
+	wg.Wait()
 }
